@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body class="GridMainLayout">
+		<header class="header">
+			<h1>Test</h1>
+		</header>
+		
+        
+		<div class="grid11">
+			<div class="grid-item1" id="scene3d"></div>
+  			<div class="grid-item2">
+				<button class="button" onclick="showLayers();">Add Layer</button>
+				<button class="button" onclick="deleteLayer()">Remove Layer</button>
+				<input type="color" id="colorPickerLayer1" Value="#37eddb">
+				<input type="color" id="colorPickerLayer2" Value="#37eddb">
+				<input type="color" id="colorPickerLayer3" Value="#37eddb">
+				<form method="post" enctype="multipart/form-data">
+					<input type="file" name="files[]" multiple>
+					<input type="submit" value="Upload File" name="submit" />
+				</form>
+				<select id="cakeSelection">Kuchen auswaehlen</select>
+				
+				<div id="demo">
+					
+					<button type="button" onclick="loadDoc()">Change Content</button>
+					<button type="button" onclick="drawAllCakes()">Draw Content</button>
+				
+				</div>
+				<form action="test.php">
+					<input type="submit" value="Refresh Cake List" />
+				</form>
+				<script>
+    				function reqListener () {
+    				  console.log(this.responseText);
+    				}
+				
+    				var oReq = new XMLHttpRequest(); // New request object
+    				oReq.onload = function() {
+    				    var x = this.response();
+    				};
+    				oReq.open("get", "test.php", true);
+    				//                               ^ Don't block the rest of the execution.
+    				//                                 Don't wait until the request finishes to
+    				//                                 continue.
+    				oReq.send();
+					</script>
+
+				  
+				
+				
+				
+			</div>
+			
+			
+		</div>
+        
+
+		<!-- <div id="scene3d"></div> -->
+		<!-- <script src="js/three.js"></script> -->
+	<footer class="footer">
+		<h1>Ich bin ein Footer</h1>
+	</footer>	
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"></script>
+		<script src="js/obj.js"></script>
+		<script src="js/mtl.js"></script>
+		<script src="js/visuTorte.js"></script>
+		<script src="js/upload.js"></script>
+
+		
+		
+		
+	</body>
+</html>

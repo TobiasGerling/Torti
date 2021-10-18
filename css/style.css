@@ -1,0 +1,62 @@
+#test{
+  background-color: rgb(223, 113, 10);
+  
+}
+
+.GridMainLayout{ 
+    display: grid; 
+    height: 100vh;  
+    grid-template-rows: 10% 80% 10%; 
+    grid-template-columns: 100%;
+  }
+
+
+.grid11{ 
+    display: grid;
+    height: auto;  
+    grid-row: 2;
+    grid-template-columns: 50% 50%; 
+  }
+
+.grid-item1 {
+    text-align: center;
+    grid-column: 1;
+    background-color: #12d4b4d7;
+
+
+  }
+  
+.grid-item2 {
+    text-align: center;
+    grid-column: 2;
+    background-color: rgb(184, 53, 53);
+
+
+  }
+.header {
+    height: auto;
+    grid-row: 1;
+    background-color: hotpink;
+}
+
+.footer{
+    height: auto;
+    grid-row: 3;
+    background-color: hotpink;
+}
+
+
+/* This styles the button in the 3D description*/
+.button {
+    width: 35%;
+    height: 40px;
+    font-size: 16px;
+    font-family: sans-serif;
+    margin-top: 5vh;
+    margin-left: center;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    background: dodgerblue;
+    color: white;
+}
