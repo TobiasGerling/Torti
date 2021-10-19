@@ -22,8 +22,11 @@
 				<form method="post" enctype="multipart/form-data">
 					<input type="file" name="files[]" multiple>
 					<input type="submit" value="Upload File" name="submit" />
+					<select id="cakeSelection" onchange="selectionChanged()">
+						<option>Select a cake mofo</option>
+					</select>
 				</form>
-				<select id="cakeSelection">Kuchen auswaehlen</select>
+				
 				
 				<div id="demo">
 					
@@ -34,26 +37,6 @@
 				<form action="test.php">
 					<input type="submit" value="Refresh Cake List" />
 				</form>
-				<script>
-    				function reqListener () {
-    				  console.log(this.responseText);
-    				}
-				
-    				var oReq = new XMLHttpRequest(); // New request object
-    				oReq.onload = function() {
-    				    var x = this.response();
-    				};
-    				oReq.open("get", "test.php", true);
-    				//                               ^ Don't block the rest of the execution.
-    				//                                 Don't wait until the request finishes to
-    				//                                 continue.
-    				oReq.send();
-					</script>
-
-				  
-				
-				
-				
 			</div>
 			
 			

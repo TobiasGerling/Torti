@@ -15,7 +15,9 @@ var currentColorLayer2 = "#37eddb";
 var colorInputLayer2;
 var currentColorLayer3 = "#37eddb";
 var colorInputLayer3;
-var drowndownMenue
+var cakeSelection = document.getElementById("cakeSelection");
+
+
 
 
 // Defining a variable for our two models
@@ -69,17 +71,12 @@ scene3d.appendChild(renderer.domElement);
 function startup(){
 
   //allCakes.json ist eine Liste aller Kuchen die aktuell auf dem Server gespeichert sind. 
-  fetch('allCakesJSON.json')
-  .then(response => response.json())
-  .then(function(data){
-    
-    allCakes=data;
-    allCakes.splice(0,2);
-  });
+  fetchAllCakesOnServer()
+  
 
 
 
-    drowndownMenue = document.getElementById("cakeSelection");
+   
 
     /* Eventlistener fuer ColorPicker werden angemeldet  */
     colorPickerLayer1 = document.getElementById("colorPickerLayer1");
@@ -116,17 +113,20 @@ function updateLayer1(){
 
 // GEOMETRY & MATERIALS
 
-
+function draw(currentlySelectedCake){
 // Load  Cake
 var cakeLoader = new THREE.MTLLoader();
-
-cakeLoader.load('uploads/Cake.mtl', function (materials) {    
+var element1Path1 = "uploads/" +currentlySelectedCake + "/Element1.mtl";
+var element1Path2 = "uploads/" +currentlySelectedCake + "/Element1.obj";
+var element2Path1 = "uploads/" +currentlySelectedCake + "/Element2.mtl";
+var element2Path2 = "uploads/" +currentlySelectedCake + "/Element2.obj";
+cakeLoader.load(element1Path1, function (materials) {    
     materials.preload();
 
     // Load the Cake
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
-    objLoader.load('uploads/Cake.obj', function (object) {
+    objLoader.load(element1Path2 , function (object) {
         
         layer1 = object.clone();
         layer2 = object.clone(); 
@@ -171,13 +171,13 @@ cakeLoader.load('uploads/Cake.mtl', function (materials) {
 // Load a Dekor
 var dekoLoader = new THREE.MTLLoader();
 
-dekoLoader.load('uploads/Rim.mtl', function (materials) {    
+dekoLoader.load(element2Path1, function (materials) {    
     materials.preload();
 
     // Load the Cake
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(materials);
-    objLoader.load('uploads/Rim.obj', function (object) {
+    objLoader.load(element2Path2, function (object) {
         
         layer1Rim = object.clone();
         layer2Rim = object.clone(); 
@@ -218,6 +218,7 @@ dekoLoader.load('uploads/Rim.mtl', function (materials) {
 
 });
 
+}
 
 // FINISH SCENE SETUP
 function animate(){
@@ -340,18 +341,36 @@ function scaleObject(object,x,y,z){
     }
 
 
-/* function addCaketoDropdown(){
-  
-  layerArray.forEach(element => {
+function fetchAllCakesOnServer(){
 
-    var option = document.createElement("option");
-    option.text = element.name;    
-    dropdownMenue.add(option);
-
+  fetch('allCakesJSON.json')
+  .then(response => response.json())
+  .then(function(data){
+    
+    allCakes=data;
+    allCakes.splice(0,2);
+    populateCakeSelection()
   });
-  
 
-} */
+  
+}
+
+function populateCakeSelection(){
+ 
+  
+  allCakes.forEach(option => {
+    var eintrag = document.createElement("option");
+    eintrag.textContent = option;
+    eintrag.value = option;
+    cakeSelection.appendChild(eintrag);
+    
+  });
+}
+
+function selectionChanged(){
+ var currentlySelectedCake = cakeSelection.value;
+ draw(currentlySelectedCake);
+}
 
 
 
