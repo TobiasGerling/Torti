@@ -23,7 +23,7 @@ var layer3Elements = [];
 
 
 
-
+var Test;
 // Defining a variable for our two models
 var layer1;
 var layer2;
