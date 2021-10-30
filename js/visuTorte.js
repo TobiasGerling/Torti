@@ -4,32 +4,30 @@ var scene3d = document.getElementById("scene3d");
 var CANVAS_WIDTH = scene3d.clientWidth;
 var CANVAS_HEIGHT = scene3d.clientHeight;
 var allCakes = [];
+var currentCakeElements = [];
 var layerArray = [];
 var cakePath = "";
 const tortendurchmesser = 3;
 const tortenhoehe = 39.8;
 const rotationSpeed = 0.005;
-var currentColorLayer1 = "#37eddb";
 var colorInputLayer1;
-var currentColorLayer2 = "#37eddb";
 var colorInputLayer2;
-var currentColorLayer3 = "#37eddb";
 var colorInputLayer3;
 var cakeSelection = document.getElementById("cakeSelection");
+var cakeSelectionForm = document.getElementById("cakeSelectionForm");
+var layer1Elements = [];
+var layer2Elements = [];
+var layer3Elements = [];
+
+
 
 
 
 
 // Defining a variable for our two models
 var layer1;
-var layer1Rim;
 var layer2;
-var layer2Rim;
 var layer3;
-var layer3Rim;
-var layer3Group = new THREE.Group();
-var layer2Group = new THREE.Group();
-var layer1Group = new THREE.Group();
 var animationFrame;
 
 
@@ -71,12 +69,11 @@ scene3d.appendChild(renderer.domElement);
 function startup(){
 
   //allCakes.json ist eine Liste aller Kuchen die aktuell auf dem Server gespeichert sind. 
-  fetchAllCakesOnServer()
+  fetchAllCakesOnServer();
+
   
 
-
-
-   
+  
 
     /* Eventlistener fuer ColorPicker werden angemeldet  */
     colorPickerLayer1 = document.getElementById("colorPickerLayer1");
@@ -92,20 +89,20 @@ function startup(){
 //Methode update all wird bei immer aufgerufen wenn der ColorPicker geschlossen wird
 function updateLayer1(){
     currentColor = event.target.value;
+    layer1Elements[0].setColor(currentColor);
 
-    layer1.setColor(currentColor);
   }
 
   function updateLayer2(){
     currentColor = event.target.value;
+    layer2Elements[0].setColor(currentColor);
 
-    layer2.setColor(currentColor);
   }
 
   function updateLayer3(){
     currentColor = event.target.value;
+    layer3Elements[0].setColor(currentColor);
 
-    layer3.setColor(currentColor);
   }
 
 
@@ -113,180 +110,120 @@ function updateLayer1(){
 
 // GEOMETRY & MATERIALS
 
+function objectLoader(i, materialPath, objectPath){
+  
+  
+  var cakeLoader = new THREE.MTLLoader();
+  
+  
+
+  cakeLoader.load(materialPath, function (materials) { 
+ 
+    materials.preload();
+
+    // Load the Cake
+    var objLoader = new THREE.OBJLoader(manager);
+    objLoader.setMaterials(materials);
+    objLoader.load(objectPath , function (object) {
+
+      layer1 = object.clone();
+      layer2 = object.clone(); 
+      layer3 = object.clone();
+
+      layer1.name = "Layer1Part" + i;
+      layer2.name = "Layer2Part" + i;
+      layer3.name = "Layer3Part" + i;
+
+
+
+      layer1.traverse((child) => {
+          if (child.isMesh) {
+            child.material = child.material.clone();
+          }
+        });
+
+        layer2.traverse((child) => {
+          if (child.isMesh) {
+            child.material = child.material.clone();
+          }
+        });
+
+        layer3.traverse((child) => {
+          if (child.isMesh) {
+            child.material = child.material.clone();
+          }
+        });
+
+        layer1Elements.push(layer1);      
+        layer2Elements.push(layer2);
+        layer3Elements.push(layer3);
+
+
+      layer2.position.y = tortenhoehe;
+      layer3.position.y = tortenhoehe*2*0.75;
+
+      scaleObject(layer2,0.75,0.5,0.75);
+      scaleObject(layer3, 0.5,0.25,0.5); 
+
+   
+      camera.lookAt(layer2.position);
+     
+  });
+ 
+});
+
+
+}
+
 function draw(currentlySelectedCake){
+
+layerArray = [];
 // Load  Cake
-var cakeLoader = new THREE.MTLLoader();
-var element1Path1 = "uploads/" +currentlySelectedCake + "/Element1.mtl";
-var element1Path2 = "uploads/" +currentlySelectedCake + "/Element1.obj";
-var element2Path1 = "uploads/" +currentlySelectedCake + "/Element2.mtl";
-var element2Path2 = "uploads/" +currentlySelectedCake + "/Element2.obj";
-cakeLoader.load(element1Path1, function (materials) {    
-    materials.preload();
 
-    // Load the Cake
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.load(element1Path2 , function (object) {
-        
-        layer1 = object.clone();
-        layer2 = object.clone(); 
-        layer3 = object.clone();
+var i;
+
+for (i = 0; i < currentCakeElements.length; i+=1){
+
+  if(currentCakeElements[i].endsWith(".mtl")){
+
+    var materialPath = "uploads/" + currentlySelectedCake + "/" + currentCakeElements[i];
+    var objectPath = "uploads/" + currentlySelectedCake + "/" + currentCakeElements[i+1];
+
+    objectLoader(i, materialPath, objectPath);
+  }
+ 
+}
 
 
-        
-
-        layer1.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-            }
-          });
-
-          layer2.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-            }
-          });
-
-          layer3.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-            }
-          });
-
-        layer2.position.y = tortenhoehe;
-        layer3.position.y = tortenhoehe*2*0.75;
-
-     
-        camera.lookAt(layer2.position);
-        
-       
-
-    });
-
-    
-
-
-});
-
-// Load a Dekor
-var dekoLoader = new THREE.MTLLoader();
-
-dekoLoader.load(element2Path1, function (materials) {    
-    materials.preload();
-
-    // Load the Cake
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(materials);
-    objLoader.load(element2Path2, function (object) {
-        
-        layer1Rim = object.clone();
-        layer2Rim = object.clone(); 
-        layer3Rim = object.clone();
-
-       
-
-        layer1Rim.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-            }
-          });
-
-          layer2Rim.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-            }
-          });
-
-          layer3Rim.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-            }
-          });
-
-        layer2Rim.position.y = tortenhoehe;
-        layer3Rim.position.y = tortenhoehe*2*0.75;
-
-     
-        camera.lookAt(layer2.position);
-        
-       
-
-    });
-
-    
-
-
-});
 
 }
 
 // FINISH SCENE SETUP
-function animate(){
 
 
-    
-
-    animationFrame = requestAnimationFrame(animate);
-    
-    if(layer1Group != null){
-        layer1Group.rotation.y += rotationSpeed;
-        
-        setColor(layer1);
-           
-    }
-
-    if(layer2Group != null){
-        layer2Group.rotation.y += rotationSpeed;
-        setColor(layer2);
-        scaleObject(layer2,0.75,0.5,0.75);        
-        scaleObject(layer2Rim,0.75,0.5,0.75);        
-    }
-
-    if(layer3Group != null){
-        layer3Group.rotation.y += rotationSpeed;
-        setColor(layer3);
-        scaleObject(layer3, 0.5,0.25,0.5);        
-        scaleObject(layer3Rim, 0.5,0.25,0.5);        
-    }
- 
-    
-    renderer.render(scene, camera);
-
-   
-}
-
-
+//Array welches die die aktuell sichtbaren Layers beinhalten. Wird eine Layer geloescht wird diese aus diesem Array herausgenommen
 function showLayers(){
     
     if (layerArray.length == 2) {
     
         
-        layer3Group.add(layer3)
-        layer3Group.add(layer3Rim)
-        layer3Group.name = "Layer3"
-        
-        layerArray.push(layer3Group);
+ 
+        layerArray.push(layer3Elements);
         
        
         }
     if (layerArray.length == 1) {
 
-        
-        layer2Group.add(layer2)
-        layer2Group.add(layer2Rim)
-        layer2Group.name = "Layer2"
 
-        layerArray.push(layer2Group);
+
+        layerArray.push(layer2Elements);
        
     }
     if (layerArray.length == 0) {
 
 
-        layer1Group.add(layer1)
-        layer1Group.add(layer1Rim)
-        layer1Group.name = "Layer1"
 
-        layerArray.push(layer1Group);
+        layerArray.push(layer1Elements);
        
     }
 
@@ -295,34 +232,31 @@ function showLayers(){
 }
 
 function deleteLayer(){
+  var todeleteElementIndex = layerArray.length -1; 
+   layerArray[todeleteElementIndex].forEach(element => {
+    var objectInScene = scene.getObjectByName(element.name);
+    scene.remove(objectInScene);
+ }); 
 
-    var objectName = layerArray[layerArray.length-1].name;
-   
-    var currentObject = scene.getObjectByName(objectName);
-    scene.remove(currentObject);
 
-    layerArray.pop(); 
-
-    cancelAnimationFrame(animationFrame);
-    animate();
+  layerArray.pop(); 
+  
 }
 
-
-function drawLayers(){
-
-    layerArray.forEach(element => {
-        
-        var objectInScene = scene.getObjectByName(element.name);
-
-        if(objectInScene == null) {
-            scene.add(element);
-
-        }
+function deleteAllLayers(){
+  layerArray.forEach(layer => {
+    layer.forEach(element => {
+      scene.remove(scene.getObjectByName(element.name));
+      
     });
-
-    cancelAnimationFrame(animationFrame);
-    animate();
+    
+  });
+layerArray = [];
+layer1Elements = [];
+layer2Elements = [];
+layer3Elements = [];
 }
+
 
 function setColor(object){
 
@@ -368,12 +302,83 @@ function populateCakeSelection(){
 }
 
 function selectionChanged(){
- var currentlySelectedCake = cakeSelection.value;
- draw(currentlySelectedCake);
+
+  deleteAllLayers();
+
+var currentlySelectedCake = cakeSelection.value; 
+//Form Data wird benoetigt um grosse Mengen an Daten per "$_POST["currentlySelectedCake"];" in PHP abzurufen 
+var formData = new FormData();
+formData.append("currentlySelectedCake", currentlySelectedCake);
+
+ fetch("test.php", {
+  method: 'POST',
+  body: formData,
+}).then((response) => {
+  
+  fetchCurrentCakeElements(currentlySelectedCake);
+})
+  
+
+}
+
+function fetchCurrentCakeElements(currentlySelectedCake){
+ fetch('currentCakeElements.json')
+  .then(response => response.json())
+  .then(function(data){
+    
+    currentCakeElements=data;
+    currentCakeElements.splice(0,2);
+    draw(currentlySelectedCake);
+    
+  });
 }
 
 
 
+function drawLayers(){
 
+  layerArray.forEach(layer => {
+      
+      layer.forEach((element, index) => {
+        var objectInScene = scene.getObjectByName(element.name);
+        if(index == 0){
+          
+          setColor(element);
+        }
+        if(objectInScene == null) {
+            
+            scene.add(element);
+            
+
+        }
+    });
+        
+      });
+      
+
+  cancelAnimationFrame(animationFrame);
+  animate();
+}
+function animate(){
+
+  animationFrame = requestAnimationFrame(animate);
+  layerArray.forEach(layer => {
+
+    
+        
+    layer.forEach((element, index) => {
+
+      element.rotation.y += rotationSpeed;
+    });
+       /*  setColor(layer1); */ 
+           
+    });
+
+  
+  
+  renderer.render(scene, camera);
+
+ 
+}
 
 

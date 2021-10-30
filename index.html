@@ -22,21 +22,20 @@
 				<form method="post" enctype="multipart/form-data">
 					<input type="file" name="files[]" multiple>
 					<input type="submit" value="Upload File" name="submit" />
-					<select id="cakeSelection" onchange="selectionChanged()">
-						<option>Select a cake mofo</option>
-					</select>
+					
 				</form>
 				
 				
 				<div id="demo">
 					
 					<button type="button" onclick="loadDoc()">Change Content</button>
-					<button type="button" onclick="drawAllCakes()">Draw Content</button>
+					
 				
 				</div>
-				<form action="test.php">
-					<input type="submit" value="Refresh Cake List" />
-				</form>
+				<select id="cakeSelection" name="cakeSelection" onchange="selectionChanged()">
+					<option disabled selected>Select a cake mofo</option>
+				</select>
+
 			</div>
 			
 			
