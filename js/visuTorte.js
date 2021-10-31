@@ -1,30 +1,31 @@
 
 
 var scene3d = document.getElementById("scene3d");
+const light = new THREE.HemisphereLight(0xffffff, 1)
 var CANVAS_WIDTH = scene3d.clientWidth;
 var CANVAS_HEIGHT = scene3d.clientHeight;
 var allCakes = [];
 var currentCakeElements = [];
 var layerArray = [];
-var cakePath = "";
-const tortendurchmesser = 3;
-const tortenhoehe = 39.8;
 const rotationSpeed = 0.005;
+
 var colorInputLayer1;
 var colorInputLayer2;
 var colorInputLayer3;
+
 var cakeSelection = document.getElementById("cakeSelection");
 var cakeSelectionForm = document.getElementById("cakeSelectionForm");
 var layer1Elements = [];
 var layer2Elements = [];
 var layer3Elements = [];
+const manager = new THREE.LoadingManager();
 
 
 
 
 
-var Test;
 // Defining a variable for our two models
+
 var layer1;
 var layer2;
 var layer3;
@@ -41,19 +42,28 @@ window.addEventListener("load", startup, false);
 scene = new THREE.Scene();
 
 // CAMERA 
+camera = new THREE.PerspectiveCamera(50, CANVAS_WIDTH / CANVAS_HEIGHT, 0.1, 10000);
 
-camera = new THREE.PerspectiveCamera(50, CANVAS_WIDTH / CANVAS_HEIGHT, 0.1, 1000);
-camera.position.x = 0;
-camera.position.y = 120;
-camera.position.z = 200;
+function setCamera(cakeHeight){
 
+camera.position.y = cakeHeight*2.75;
+camera.position.z = cakeHeight*4;
 
+var lookatPosition = new THREE.Vector3(0,cakeHeight+0.5*cakeHeight,0);
+
+camera.lookAt(lookatPosition);
 
 // LIGHTNING
-const light = new THREE.HemisphereLight(0xffffff, 1)
-light.position.set(0, 50, 60)
+
+light.position.set(0, cakeHeight, cakeHeight)
 
 scene.add(light)
+  
+}
+
+
+
+
 
 // RENDERER
 
@@ -157,17 +167,11 @@ function objectLoader(i, materialPath, objectPath){
         layer1Elements.push(layer1);      
         layer2Elements.push(layer2);
         layer3Elements.push(layer3);
-
-
-      layer2.position.y = tortenhoehe;
-      layer3.position.y = tortenhoehe*2*0.75;
-
-      scaleObject(layer2,0.75,0.5,0.75);
-      scaleObject(layer3, 0.5,0.25,0.5); 
-
-   
-      camera.lookAt(layer2.position);
-     
+      
+       
+        
+        
+        
   });
  
 });
@@ -175,6 +179,43 @@ function objectLoader(i, materialPath, objectPath){
 
 }
 
+function positionLayers(){
+var cakeHeight = 0;
+
+//Hier wird erstmal ueber alle Elemente hinweg die maximal Hohe ermittelt
+layerArray.forEach((layer) => {
+  layer.forEach(element => {
+   
+      var box = new THREE.Box3().setFromObject(element);
+      var heightOfCurrentElement = box.max.y - box.min.y;
+      if(heightOfCurrentElement>cakeHeight){
+        cakeHeight = heightOfCurrentElement;
+      }
+  });
+});
+//Hier wird die maximal Hoehe angewand um die Torten zu positionieren
+layerArray.forEach((layer,index) => {
+  layer.forEach(element => {
+    //verschiebung auf der y Achse um den Kuchen unabhaengig der groesse des Modells mittig zu positionieren
+    var verschiebung = 0.5*cakeHeight;
+    if(index == 0){
+      element.position.y = verschiebung;
+    }
+    if(index == 1){
+      element.position.y = cakeHeight + verschiebung;
+      scaleObject(element,0.75,0.5,0.75);
+    }
+    if(index == 2){
+      element.position.y = verschiebung+cakeHeight*2*0.75; //*0.75 da wir die Skalierung von Layer 2 direkt darueber beruecksichtigen muessen
+      scaleObject(element,0.5,0.25,0.5);
+      
+    }
+
+  });
+});
+  setCamera(cakeHeight);  
+
+}
 function draw(currentlySelectedCake){
 
 layerArray = [];
@@ -226,7 +267,7 @@ function showLayers(){
         layerArray.push(layer1Elements);
        
     }
-
+    positionLayers();
     drawLayers();
     
 }
@@ -338,6 +379,8 @@ function fetchCurrentCakeElements(currentlySelectedCake){
 function drawLayers(){
 
   layerArray.forEach(layer => {
+
+    
       
       layer.forEach((element, index) => {
         var objectInScene = scene.getObjectByName(element.name);
