@@ -1,60 +1,82 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>My first three.js app</title>
-		<link rel="stylesheet" href="css/style.css">
-	</head>
-	<body class="GridMainLayout">
-		<header class="header">
-			<h1>Test</h1>
-		</header>
-		
-        
-		<div class="grid11">
-			<div class="grid-item1" id="scene3d"></div>
-  			<div class="grid-item2">
-				<button class="button" onclick="showLayers();">Add Layer</button>
-				<button class="button" onclick="deleteLayer()">Remove Layer</button>
+
+<head>
+	<meta charset="utf-8">
+	<title>My first three.js app</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="GridMainLayout">
+	<header class="header">
+		<h1>Test</h1>
+	</header>
+
+
+	<div class="grid11">
+		<div id="grid_cake_display"></div>
+		<div id="grid_cake_settings">
+			<div id="grid_sector_0" class="grid_sector">
+				<!--Liste wird über autoGenerateCakeList.js und cardTemplate befüllt -->
+
+				<ul id="cakeList"></ul>
+
+				<template id="cardTemplate">
+					<li class="card">
+						<div>
+							<img class="kuchenBild">
+							<p class="kuchenName"></p>
+						</div>
+					</li>
+				</template>
+
+
+				<button id="weiter_button" class="weiter_button"> Auswahl bestaetigen </button>
+			</div>
+
+			<div id="grid_sector_1" class="grid_sector">
+				<h1>Weiter gehts</h1>
+				<button onclick="showLayers();">Add Layer</button>
+				<button onclick="deleteLayer()">Remove Layer</button>
 				<input type="color" id="colorPickerLayer1" Value="#37eddb">
 				<input type="color" id="colorPickerLayer2" Value="#37eddb">
 				<input type="color" id="colorPickerLayer3" Value="#37eddb">
 				<form method="post" enctype="multipart/form-data">
 					<input type="file" name="files[]" multiple>
 					<input type="submit" value="Upload File" name="submit" />
-					
 				</form>
-				
-				
-				<div id="demo">
-					
-					<button type="button" onclick="loadDoc()">Change Content</button>
-					
-				
-				</div>
 				<select id="cakeSelection" name="cakeSelection" onchange="selectionChanged()">
 					<option disabled selected>Select a cake mofo</option>
 				</select>
+				<button onclick="testfunciton()">Test</button>
 
 			</div>
-			
-			
 		</div>
-        
 
-		<!-- <div id="scene3d"></div> -->
-		<!-- <script src="js/three.js"></script> -->
+
+	</div>
+
+
+	<!-- <div id="scene3d"></div> -->
+	<!-- <script src="js/three.js"></script> -->
 	<footer class="footer">
-		<h1>Ich bin ein Footer</h1>
-	</footer>	
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"></script>
-		<script src="js/obj.js"></script>
-		<script src="js/mtl.js"></script>
-		<script src="js/visuTorte.js"></script>
-		<script src="js/upload.js"></script>
 
-		
-		
-		
-	</body>
+	</footer>
+	<script src="js/jquery-3.6.0.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+	<script src="js/obj.js"></script>
+	<script src="js/mtl.js"></script>
+	<script src="js/visuTorte.js"></script>
+	<script src="js/upload.js"></script>
+	<script src="js/pageNavigation.js"></script>
+	<script src="js/autoGenerateCakeList.js"></script>
+
+
+
+
+
+
+</body>
+
 </html>

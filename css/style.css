@@ -1,13 +1,63 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 62.5%;
+  color: rgb(70, 70, 70);
+  font: 'Trebuchet MS';
+}
+
+button {
+  font: 'Trebuchet MS';
+  width: 35%;
+  height: 40px;   
+  margin-top: 5vh;
+  margin-left: center;
+  border: none;
+  outline: none;
+  border-radius: 1em 1em 1em 1em;
+  background: rgba(70, 70, 70, 0.103);
+}
+
+h1{
+  margin: 0;
+}
+
+img {
+  margin: 0px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+ul{
+  margin: 0px;
+}
+
+ul li{
+  display: inline-block;
+ 
+}
+
+p{
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
 #cakeSelection{
   width: 200px;
   
 }
 
+
 .GridMainLayout{ 
-    display: grid; 
-    height: 100vh;  
-    grid-template-rows: 10% 80% 10%; 
-    grid-template-columns: 100%;
+    display: grid;
+    
+    grid-template-rows: 10vh 80vh 10vh; 
+    grid-template-columns: 100vw;
   }
 
 
@@ -15,48 +65,78 @@
     display: grid;
     height: auto;  
     grid-row: 2;
-    grid-template-columns: 50% 50%; 
+    grid-template-columns: 50vw 50vw; 
   }
 
-.grid-item1 {
+#grid_cake_display {
     text-align: center;
     grid-column: 1;
-    background-color: #12d4b4d7;
-
+    ;
 
   }
   
-.grid-item2 {
+#grid_cake_settings {
     text-align: center;
-    grid-column: 2;
-    background-color: rgb(184, 53, 53);
-
-
+    grid-column: 2;    
+    overflow-y: scroll;
   }
+
+.grid_sector{
+  position: relative;
+  height: 100%;
+}
+
+
+.card{
+  margin: 1em 1em 1em 1em;
+  border-style: solid;
+  border-color: rgba(70, 70, 70, 0.103);
+  border-radius: 4em 2em 4em 2em;
+  width: 150px;
+  height: 200px;
+}
+
+.selected{
+  border: 3px;
+  border-style: solid;
+  border-color: hotpink;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  
+}
+
+
+.card img{
+  margin: 1em 0em 0em 0em;
+  max-height: 90%;
+  max-width: 90%; 
+}
+.card p{
+  font-size: 2em;
+  
+  font-weight: 800;
+
+}
+
 .header {
     height: auto;
     grid-row: 1;
-    background-color: hotpink;
+    background-image: url(../assets/images/Backround.png);
 }
 
 .footer{
     height: auto;
     grid-row: 3;
-    background-color: hotpink;
+    background-image: url(../assets/images/Backround.png);
+
+  
+}
+.weiter_button{
+  background-color: rgb(35, 122, 13);
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+  
+
 }
 
 
-/* This styles the button in the 3D description*/
-.button {
-    width: 35%;
-    height: 40px;
-    font-size: 16px;
-    font-family: sans-serif;
-    margin-top: 5vh;
-    margin-left: center;
-    border: none;
-    outline: none;
-    border-radius: 20px;
-    background: dodgerblue;
-    color: white;
-}
